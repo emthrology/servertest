@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>JSP Tag 연습</h1>
+	<a href="/jspTag/actionTag/jsp_forward.jsp">1. actionTag(forward)</a><br>
+	<a href="/jspTag/actionTag/jsp_include.jsp">2. actionTag(include)</a><br>
+	<a href="/jspTag/actionTag/jsp_useBean.jsp">3. actionTag(useBean)</a><br>
+	<a href="/jspTag/">4. EL</a><br>
+	<a href="/jspTag/JSTL/jsp_JSTL_Basic1.jsp">5. JSTL 기초1</a><br>
+	<a href="/jspTag/JSTL/jsp_JSTL.jsp">6. JSTL 제어문</a>
+</body>
+</html>

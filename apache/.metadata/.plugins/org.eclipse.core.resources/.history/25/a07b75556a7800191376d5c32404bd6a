@@ -1,0 +1,5 @@
+package member2.model.controller;
+
+public class Member2Service {
+
+}

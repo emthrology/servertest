@@ -1,0 +1,245 @@
+package notice.model.dao;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Properties;
+
+import common.JDBCTemplate;
+import notice.model.vo.Notice;
+import notice.model.vo.NoticeComment;
+
+public class NoticeDao {
+	private Properties prop = new Properties();
+	public NoticeDao() {
+		String fileName = NoticeDao.class.getResource("/sql/notice/noticeQuery.properties").getPath(); // 절대경로 구해오는법
+		//System.out.println(fileName);
+		try {
+			prop.load(new FileReader(fileName));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public ArrayList<Notice> callList(Connection conn, int start, int end) {
+		ArrayList<Notice> list = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String query = prop.getProperty("callList");
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, start);
+			pstmt.setInt(2, end);
+			rset = pstmt.executeQuery();
+			list = new ArrayList<Notice>();
+			while(rset.next()) {
+				Notice n = new Notice();
+				n.setNoticeNo(rset.getInt("notice_no"));
+				n.setNoticeTitle(rset.getString("notice_title"));
+				n.setNoticeAuthor(rset.getString("notice_author"));
+				n.setNoticeContent(rset.getString("notice_content"));
+				n.setNoticeDate(rset.getDate("notice_date"));
+				list.add(n);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return list;
+	}
+
+	public int totalCount(Connection conn) {
+		int totalCount = 0;
+		Statement stmt = null;
+		ResultSet rset = null;
+		String query = prop.getProperty("totalCount");
+		try {
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(query);
+			if(rset.next()) {
+				totalCount = rset.getInt("cnt");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(stmt);
+		}
+		return totalCount;
+	}
+
+	public Notice selectOne(Connection conn, int noticeNo) {
+		Notice n = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String query = prop.getProperty("selectOne");
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, noticeNo);
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				n = new Notice();
+				n.setNoticeNo(rset.getInt("notice_no"));
+				n.setNoticeTitle(rset.getString("notice_title"));
+				n.setNoticeAuthor(rset.getString("notice_author"));
+				n.setNoticeContent(rset.getString("notice_content"));
+				n.setNoticeDate(rset.getDate("notice_date"));
+				n.setFilename(rset.getString("filename"));
+				n.setFilepath(rset.getString("filepath"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return n;
+	}
+
+	public int insertNotice(Connection conn, Notice n) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String query = prop.getProperty("insertNotice");
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, n.getNoticeTitle());
+			pstmt.setString(2, n.getNoticeAuthor());
+			pstmt.setString(3, n.getNoticeContent());
+			pstmt.setString(4, n.getFilename());
+			pstmt.setString(5, n.getFilepath());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int isertNoticeComment(Connection conn, NoticeComment nc) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String qurey = prop.getProperty("noticeCommentInsert");
+		try {
+			pstmt = conn.prepareStatement(qurey);
+			pstmt.setInt(1, nc.getNoticeCommentLevel());
+			pstmt.setString(2, nc.getNoticeCommentAuthor());
+			pstmt.setString(3, nc.getNoticeCommentContent());
+			pstmt.setInt(4, nc.getNoticeRef());
+			pstmt.setString(5, nc.getNoticeCommentRef()==0?null:String.valueOf(nc.getNoticeCommentRef())); // 오라클은 문자열 형식 숫자도 숫자로 인식하고, 숫자 필드에 null도 입력 가능함을 이용한 코드
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public ArrayList<NoticeComment> selectCommentList(Connection conn, int noticeNo) {
+		ArrayList<NoticeComment> list = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String query = prop.getProperty("selectCommentList");
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, noticeNo);
+			rset = pstmt.executeQuery();
+			list = new ArrayList<NoticeComment>();
+			while(rset.next()) {
+				NoticeComment nc = new NoticeComment();
+				nc.setNoticeCommentNo(rset.getInt("notice_comment_no"));
+				nc.setNoticeCommentLevel(rset.getInt("notice_comment_level"));
+				nc.setNoticeCommentAuthor(rset.getString("notice_comment_author"));
+				nc.setNoticeCommentContent(rset.getString("notice_comment_content"));
+				nc.setNoticeRef(rset.getInt("notice_ref"));
+				nc.setNoticeCommentRef(rset.getInt("notice_comment_ref"));
+				nc.setNoticeCommentDate(rset.getDate("notice_comment_date"));
+				list.add(nc);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return list;
+	}
+
+	public int updateNoticeComment(Connection conn, NoticeComment nc) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String query = prop.getProperty("noticeCommentUpdate");
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, nc.getNoticeCommentLevel());
+			pstmt.setString(2, nc.getNoticeCommentContent());
+			pstmt.setInt(3, nc.getNoticeCommentNo());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int noticeUpdate(Connection conn, Notice n) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String query = prop.getProperty("updateNotice");
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, n.getNoticeTitle());
+			pstmt.setString(2, n.getNoticeContent());
+			pstmt.setString(3, n.getFilename());
+			pstmt.setString(4, n.getFilepath());
+			pstmt.setInt(5, n.getNoticeNo());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int deleteNotice(Connection conn, int noticeNo) {
+		int result =0;
+		PreparedStatement pstmt = null;
+		String query = prop.getProperty("deleteNotice");
+		System.out.println(query);
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, noticeNo);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+}

@@ -1,0 +1,3 @@
+#member2Query.properties
+join = insert into member3 values(?,?,?)
+callList = select * from member2

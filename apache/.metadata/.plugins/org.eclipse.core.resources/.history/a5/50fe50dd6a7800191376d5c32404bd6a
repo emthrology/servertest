@@ -1,0 +1,14 @@
+package member2.model.dao;
+
+import java.sql.Connection;
+
+import member2.model.vo.Member2;
+
+public class Member2Dao {
+
+	public int join(Connection conn, Member2 m) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

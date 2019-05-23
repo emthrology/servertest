@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<servers>
+  <server auto-publish-setting="2" auto-publish-time="1" configuration-id="/Servers/dongmin-config" deployDir="wtpwebapps" hostname="localhost" id="dongmin" name="dongmin" runtime-id="dongmin" serveModulesWithoutPublish="true" server-type="org.eclipse.jst.server.tomcat.85" server-type-id="org.eclipse.jst.server.tomcat.85" start-timeout="45" stop-timeout="15" testEnvironment="true" timestamp="17">
+    <list key="modules" value0="jspTag::org.eclipse.jst.jee.server:jspTag::jst.web::3.1" value1="webProject_2::org.eclipse.jst.jee.server:webProject_2::jst.web::3.1"/>
+  </server>
+</servers>

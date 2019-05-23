@@ -1,0 +1,5 @@
+package ajax.model.dao;
+
+public class AjaxDao {
+
+}

@@ -1,0 +1,15 @@
+package member3.model.dao;
+
+import java.sql.Connection;
+
+import member3.model.vo.Member3;
+
+public class Member3Dao {
+
+	public int join(Connection conn, Member3 m3) {
+		int result = 0;
+		
+		return result;
+	}
+
+}

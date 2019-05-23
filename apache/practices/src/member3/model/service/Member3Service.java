@@ -1,0 +1,31 @@
+package member3.model.service;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import common.JDBCTemplate;
+import member3.model.dao.Member3Dao;
+import member3.model.vo.Member3;
+
+public class Member3Service {
+
+	public int join(Member3 m3) throws SQLException {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = new Member3Dao().join(conn,m3);
+		if(result >0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		return result;
+	}
+
+	public ArrayList<Member3> callList() {
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<Member3> list = new Member3Dao().callList(conn);
+		JDBCTemplate.close(conn);
+		return list;
+	}
+
+}

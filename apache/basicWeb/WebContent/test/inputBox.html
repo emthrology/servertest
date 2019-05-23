@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>체크박스/라디오버튼</h1>
+	<hr>
+	<form action="/inputBox" method="post">
+		<fieldset>
+			<legend>체크박스</legend>
+			<label><input type="checkBox" name="place" value="제주도">제주도</label>
+			<label><input type="checkBox" name="place" value="거제도">거제도</label>
+			<label><input type="checkBox" name="place" value="울릉도">울릉도</label>
+			<label><input type="checkBox" name="place" value="강원도">강원도</label><br>
+			<label><input type="checkBox" name="place" value="제주도">대마도</label>
+			<label><input type="checkBox" name="place" value="제주도">집</label>
+		</fieldset>
+		<fieldset>
+			<legend>라디오버튼</legend>
+			<label for="gender">성별 : </label>
+			<input type="radio" name="gender" value="남자" checked>남자 
+			<input type="radio" name="gender" value="여자">여자<br><br>
+			<label for="chk_mail">메일정보 수신 : </label>
+			<input type="radio" name="chk_mail" value="yes" checked>수신
+	 		<input type="radio" name="chk_mail" value="no">거부 
+		</fieldset>
+		<fieldset>
+			<label for="comment">코멘트 작성</label><br>
+			<textarea rows="3" cols="35" name="comment"></textarea>
+		</fieldset>
+		<input type="submit" value="전송">
+		<input type="reset" value="취소">
+	</form>
+</body>
+</html>

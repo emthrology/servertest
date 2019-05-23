@@ -1,0 +1,75 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%
+    	int totalCount = (Integer)request.getAttribute("totalCount");
+    %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<%@ include file="/WEB-INF/views/common/header.jsp" %>
+	<section>
+		<div class="photo-container" style="width:80%; margin:0 auto; text-align:center;">
+			<h1>사진게시판</h1>
+			<div id="photo-wrapper" style="padding:100px;">
+				
+			</div>
+			<div id="photo-btn-container">
+				<button currentCount="0" totalCount="<%=totalCount %>" value="" class="btn btn-outline-info" id="more-btn">더보기</button>
+				<% if(m != null) { %>
+					<button class="btn btn-outline-info" id="write-btn">글쓰기</button>
+				<% } %>
+			</div>
+		</div>>
+	</section>
+	<script>
+		$("#write-btn").click(function(){
+			location.href="/photoWriteForm";
+		});
+		/* 온로드로 fn_more 시작하게 세팅, 다시 클릭했을 때 start값 조정 */
+		$(function(){
+			fn_more(1);
+			$("#more-btn").click(function(){
+				fn_more($(this).val());
+			});
+		});
+		function fn_more(start) {
+			var param = {start:start};
+			$.ajax({
+				url : "/photoMore.do",
+				data : param,
+				type : "post",
+				dataType : "json",
+				success : function(data){
+					var html=""; /* view에 새로 추가할 구문 */
+					for(var i in data) {/* JS의 forEach : for-in */
+						var p = data[i];
+						html +="<div class='photo border border-dark' style='width:800px; margin:0 auto;'>";
+						html +="<img src='/upload/photo/"+p.filename+"' width='100%'>"; /* 스크립트 공간이니까 jsp처리하는거 아냐 */
+						html +="<p class='caption'>"+p.photoContent+"</p></div>";
+					} /* for-in ends */
+					$("#photo-wrapper").append(html);
+					
+					/* 더 보기를 더 누를 경우 바뀌는 숫자 세팅 */
+					$("#more-btn").val(Number(start)+5); /* JS의 형변환 */
+					$("#more-btn").attr('currentCount',Number($("#more-btn").attr("currentCount"))+data.length); /* 5가 아니라 넘어온 배열의 길이 */
+					
+					/* 더 볼 것이 없을 경우 버튼비활성화 */
+					var totalCount = $("#more-btn").attr("totalCount");
+					var currentCount = $("#more-btn").attr("currentCount");
+					if(totalCount == currentCount) {
+						$("#more-btn").attr("disabled",true);
+						$("#more-btn").css("cursor","not-allowed"); /* 마우스 모양을 'not-allowed'로 바꾸는 css */
+					}
+				},
+				error : function() {
+					console.log("ajax 처리 실패")
+				}
+			});
+		}
+	</script>
+</body>
+</html>

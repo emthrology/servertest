@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>EL 연습</h1>
+	<a href="/EL/ELTest5.jsp">5. EL test (OPERATORS)</a>
+	<a href="/EL/ELTest6.jsp">6. EL TEST (내장 객체)</a>
+</body>
+</html>

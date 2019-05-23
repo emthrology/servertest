@@ -1,0 +1,5 @@
+package member1.model.vo;
+
+public class SearchMemberData {
+
+}

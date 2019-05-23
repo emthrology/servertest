@@ -1,0 +1,5 @@
+package member2.model.dao;
+
+public class Member2Dao {
+
+}

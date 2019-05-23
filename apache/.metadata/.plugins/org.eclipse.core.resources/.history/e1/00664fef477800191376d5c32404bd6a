@@ -1,0 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+</head>
+<body>
+	<h1>회원가입페이지</h1>
+	<form action="/join" method="post">
+		아이디 : <input type="text" name="memberId">
+		비밀번호 : <input type="text" name="memberPw">
+		나이 : <input type="text" name="age">
+		성별 : <label for="sex"><input type="radio" name="sex" class="sex" value="남자"><input type="radio" name="sex" class="sex" value="여자"</label>
+	</form>
+</body>
+</html>

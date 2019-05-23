@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="jsp_EL_Test7.jsp" method="post">
+		id : <input type="text" name="id"><br>
+		choose your hoby<br>
+		fishing1<input type="checkbox" name="hobby" value="fishing1">
+		fishing2<input type="checkbox" name="hobby" value="fishing2">
+		fishing3<input type="checkbox" name="hobby" value="fishing3">
+		fishing4<input type="checkbox" name="hobby" value="fishing4">
+		fishing5<input type="checkbox" name="hobby" value="fishing5">
+		<input type="submit" value="확인">
+	</form>
+</body>
+</html>

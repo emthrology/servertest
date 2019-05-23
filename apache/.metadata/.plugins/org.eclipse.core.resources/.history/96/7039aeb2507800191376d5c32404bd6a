@@ -1,0 +1,2 @@
+#memberQuery.properties
+join = insert into member values(?,?,?,?)

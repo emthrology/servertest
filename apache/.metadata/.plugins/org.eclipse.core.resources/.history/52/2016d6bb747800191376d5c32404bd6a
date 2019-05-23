@@ -1,0 +1,36 @@
+package member3.model.dao;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Properties;
+
+import member.model.dao.MemberDao;
+import member3.model.vo.Member3;
+
+public class Member3Dao {
+	private Properties prop = new Properties();
+	public Member3Dao() {
+		String filename = MemberDao.class.getResource("/sqls/member3/member3Query.properties").getPath();
+		try {
+			prop.load(new FileReader(filename));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public int join(Connection conn, Member3 m3) throws SQLException {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String query = prop.getProperty("join");
+		pstmt = conn.prepareStatement(query);
+		pstmt.setString(1, m3.getMemberId());
+		pstmt.setString(2, m3.getMemberPw());
+		pstmt.setString(3, m3.getMemberName())
+		return result;
+	}
+
+}

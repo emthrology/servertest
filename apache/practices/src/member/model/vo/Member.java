@@ -1,0 +1,51 @@
+package member.model.vo;
+
+public class Member {
+	private String memberId;
+	private String memberPw;
+	private int age;
+	private int sex;
+	public Member() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Member(String memberId, String memberPw, int age, int sex) {
+		super();
+		this.memberId = memberId;
+		this.memberPw = memberPw;
+		this.age = age;
+		this.sex = sex;
+	}
+	public String getMemberId() {
+		return memberId;
+	}
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
+	public String getMemberPw() {
+		return memberPw;
+	}
+	public void setMemberPw(String memberPw) {
+		this.memberPw = memberPw;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public int getSex() {
+		return sex;
+	}
+	public void setSex(int sex) {
+		this.sex = sex;
+	}
+	
+	public String getSexualable() {
+		if(sex == 1) {
+			return "남자";
+		}else {
+			return "여자";
+		}
+	}
+ }

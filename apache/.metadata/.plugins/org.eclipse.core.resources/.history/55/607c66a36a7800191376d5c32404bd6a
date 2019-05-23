@@ -1,0 +1,14 @@
+package member2.model.service;
+
+import common.JDBCTemplate;
+import member2.model.vo.Member2;
+
+public class Member2Service {
+
+	public int join(Member2 m) {
+		JDBCTemplate.getConnection();
+		
+		return 0;
+	}
+
+}

@@ -1,0 +1,29 @@
+package member2.model.dao;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.util.Properties;
+
+import member.model.dao.MemberDao;
+import member2.model.vo.Member2;
+
+public class Member2Dao {
+	private Properties prop = new Properties();
+	public Member2Dao() {
+		String filename = MemberDao.class.getResource("/sqls/member2/memberQuery.properties").getPath();
+		try {
+			prop.load(new FileReader(filename));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public int join(Connection conn, Member2 m) {
+		int result = 0;
+		
+		return result;
+	}
+
+}

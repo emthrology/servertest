@@ -1,0 +1,12 @@
+package member2.model.service;
+
+import member2.model.vo.Member2;
+
+public class Member2Service {
+
+	public int join(Member2 m) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

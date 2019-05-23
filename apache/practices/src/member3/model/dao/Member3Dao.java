@@ -1,0 +1,70 @@
+package member3.model.dao;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Properties;
+
+import common.JDBCTemplate;
+import member.model.dao.MemberDao;
+import member3.model.vo.Member3;
+
+public class Member3Dao {
+	private Properties prop = new Properties();
+	public Member3Dao() {
+		String filename = MemberDao.class.getResource("/sqls/member3/member3Query.properties").getPath();
+		try {
+			prop.load(new FileReader(filename));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public int join(Connection conn, Member3 m3) throws SQLException {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String query = prop.getProperty("join");
+		pstmt = conn.prepareStatement(query);
+		pstmt.setString(1, m3.getMemberId());
+		pstmt.setString(2, m3.getMemberPw());
+		pstmt.setString(3, m3.getMemberName());
+		pstmt.setString(4, m3.getSocialSecurityNum());
+		result = pstmt.executeUpdate();
+		JDBCTemplate.close(pstmt);
+		return result;
+	}
+
+	public ArrayList<Member3> callList(Connection conn) {
+		ArrayList<Member3> list = null;
+		Statement stmt = null;
+		ResultSet rset = null;
+		String query = prop.getProperty("callList");
+		try {
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(query);
+			list = new ArrayList<Member3>();
+			while(rset.next()) {
+				Member3 m3 = new Member3();
+				m3.setMemberId(rset.getString("member_id"));
+				m3.setMemberPw(rset.getString("member_pw"));
+				m3.setMemberName(rset.getString("member_name"));
+				m3.setSocialSecurityNum(rset.getString("social_security_num"));
+				list.add(m3);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(stmt);
+		}
+		return list;
+	}
+
+}

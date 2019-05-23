@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>EL 연습</h1>
+	<a href="/jsp/ELTest1">1. Test1 (VO)</a><br>
+	<a href="/jsp/ELTest2">2. Test2 (Map)</a><br>
+	<a href="/jsp/ELTest3">3. Test3 (배열)</a><br>
+	<a href="/jsp/ELTest4">4. Test4 (List)</a><br>
+	<a href="/jsp/EL/jsp_EL_Test5.jsp">5. Test5 (연산자)</a><br>
+	<a href="/jsp/ELTest6">6. EL Test6 (내장객체)</a><br>
+	<a href="/jsp/EL/form.html">7. EL Test7 (param)</a><br>
+</body>
+</html>

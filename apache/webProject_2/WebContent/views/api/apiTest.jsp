@@ -1,0 +1,128 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=wsxy6r6myr&submodules=geocoder"></script> <!-- 네이버 api 추가 -->
+	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script> <!-- 아임포트 api 추가 -->
+</head>
+<body>
+	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+	<section>
+		<div class="container" style="color:black;">
+			<h1>1. 네이버 지도 API</h1>
+			<div id="map" style="width:100%; height:500px;"></div>
+			<h1>2. 결재모듈 API(아임포트)</h1>
+			<div id="pay">
+				<h4>
+					<label><input type="checkbox" value="1000">1000원</label>
+					<label><input type="checkbox" value="5000">5000원</label>
+					<label><input type="checkbox" value="10000">10000원</label>
+					<label><input type="checkbox" value="50000">50000원</label>
+				</h4>
+				<h3>총 결재금액<span style="display:inline-block; width:150px; text-align:right"></span>원</h3>
+				<button class="btn btn-primary btn-sm">결재하기</button>
+				<p id="paymentResult"></p>
+			</div>
+		</div>
+	</section>
+	<script>
+		$(function(){
+			var totalPay = 0;
+			$("#pay input").change(function(){
+				if($(this).is(':checked')) {
+					totalPay += (Number)($(this).val());
+				} else {
+					totalPay -= (Number)($(this).val());
+				}
+				$("#pay span").html(totalPay).css('color','blue');
+			});
+			
+			$("#pay button").click(function(){
+				var price = $("#pay span").html();
+				var d = new Date();
+				var date = d.getFullYear()+''+(d.getMonth()+1)+''+d.getDate()+''+d.getHours()+''+d.getMinutes()+''+d.getSeconds();
+				IMP.init('imp25889583');
+				IMP.request_pay({
+					merchant_uid : "상품명_"+date,			//거래ID - 유니크 주려고 날짜까지 넣음
+					name : "결재리스트",					//결재명
+					amount : price,							//결재 금액
+					buyer_email :  '111101111@naver.com',	//구매자 email
+					buyer_name : '김동민',
+					buyer_tel : '010-3159-5618',
+					buyer_addr : '서울',
+					buyer_postcode : '123-321'
+					
+				},function(response){
+					if(response.success){
+						var msg = "결재가 완료되었습니다.";
+						var info1 = "고유 ID : "+response.imp_uid;
+						var info2 = "결재 금액 : "+response.paid_amount;
+						var info3 = "카드 승인 번호 : "+response.apply_num;
+						$("#paymentResult").html(msg+"<br>"+info1+"<br>"+info2+"<br>"+info3);
+					} else {
+						$("#patmentResult").html('에러 내용 : '+response.error_mgs+date);
+					}
+				});
+			});
+		});
+	
+		window.onload = function() {
+			/* var map = new naver.maps.Map('map');  */
+			var map = new naver.maps.Map('map',{
+				center : new naver.maps.LatLng(37.533807,126.896772),
+				zoom : 11,
+				zoomControl :true,
+				zoomControlOptions:{
+					position : naver.maps.Position.TOP_RIGHT,
+					style : naver.maps.ZoomControlStyle.SMALL
+				}
+			});
+			var marker = new naver.maps.Marker({
+				position : new naver.maps.LatLng(37.533807,126.896772),
+				map : map
+			});
+			naver.maps.Event.addListener(map,'click',function(e){
+				marker.setPosition(e.coord);
+				if(infoWindow.getMap()) {
+					infoWindow.close();
+				}
+				//위도, 경도는 바로 구할 수 있음
+				//위도, 경도를 바탕으로 주소를 갖고오기 - using geocode - 위(import script)에 submodule을 추가해야함
+				naver.maps.Service.reverseGeocode({ //cf) geocode : 주소를 위.경도로 바꾸기
+					location : new naver.maps.LatLng(e.coord.lat(),e.coord.lng())
+					}, function(status,response) {
+						if(status !== naver.maps.Service.Status.OK) {/* !== : 자료형까지 비교하는 JS 연산자 */
+							return alert('주소정보 없음');
+						}
+						var result = response.result;
+						items = result.items; /* 도로명주소, 지번주소의 배열형태로 전달받음 */
+						address = items[1].address;
+						contentString = [
+							'<div class="iw_inner">',
+							'<p>'+address+'</p>',
+							'</div>'
+						].join('');
+				});
+			});
+			var contentString = [
+				'<div class="iw_inner>"',
+				'<p>서울시 영등포구 선유동2로 57 이레빌딩</p>',
+				'</div>'
+			].join('');
+			var infoWindow = new naver.maps.InfoWindow();
+			naver.maps.Event.addListener(marker, 'click', function(e){
+				if(infoWindow.getMap()) {
+					infoWindow.close();
+				} else {
+					infoWindow.setContent(contentString);
+					infoWindow.open(map, marker);
+				}
+					
+			});
+		}
+	</script>
+</body>
+</html>

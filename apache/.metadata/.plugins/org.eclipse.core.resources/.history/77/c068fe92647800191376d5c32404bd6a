@@ -1,0 +1,3 @@
+#memberQuery.properties
+join = insert into member values(?,?,?,?)
+login = select member_id from member where member_id=? and member_pw=?
